@@ -5,6 +5,10 @@
  */
 package showunqword;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -59,7 +63,7 @@ public class ParseText {
         System.out.println("Разбор текста со StringTokenizer");
 
         StringTokenizer stWord = new StringTokenizer(inputText.trim(), PATTERN1, true);
-        
+
         unqWords = new HashMap<>();
 
         while (stWord.hasMoreTokens()) {
@@ -85,6 +89,30 @@ public class ParseText {
         for (Map.Entry<String, Integer> entry : entrySetUnqWords) {
             System.out.printf("%s: %d\n", entry.getKey(), entry.getValue());
         }
+    }
+
+    public String getTextFromSite() {
+        BufferedReader reader = null;
+        String allText = "";
+
+        try {
+            URL site = new URL("http://ru.lipsum.com/");
+            reader = new BufferedReader(new InputStreamReader(site.openStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allText = allText + line;
+            }
+            reader.close();
+        } catch (IOException ex) {
+            System.out.println("Невозможно открыть сайт");
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                System.out.println("Ошибка при закрытии reader");
+            }
+        }
+        return allText;
     }
 
 }

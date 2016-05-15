@@ -7,7 +7,6 @@ package showunqword;
 
 import java.util.Scanner;
 
-
 /**
  *
  * @author Igor Gayvan
@@ -25,6 +24,7 @@ public class ShowUnqWord {
             System.out.print("Введите текст для подсчета количества уникальных слов в нем: ");
 
             String lipsumText = sc.nextLine();
+
             if (!lipsumText.equals("end")) {
 
                 ParseText parseText = new ParseText(lipsumText);
@@ -34,6 +34,9 @@ public class ShowUnqWord {
 
                 parseText.parseWithStringTokenizer();
                 parseText.showUnqWords();
+
+                String lipsumTextFromSite = parseText.getTextFromSite();                
+                System.out.println(lipsumTextFromSite);
 
             } else {
                 break;
