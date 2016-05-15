@@ -44,7 +44,7 @@ public class ParseText {
      */
     public void parseWithSplit() {
         System.out.println("Разбор текста со split");
-        String[] allWords = inputText.trim().split(PATTERN1);
+        String[] allWords = inputText.trim().split(PATTERN2);
 
         unqWords = new HashMap<>();
 

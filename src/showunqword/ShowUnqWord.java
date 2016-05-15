@@ -35,8 +35,15 @@ public class ShowUnqWord {
                 parseText.parseWithStringTokenizer();
                 parseText.showUnqWords();
 
-                String lipsumTextFromSite = parseText.getTextFromSite();                
+                String lipsumTextFromSite = parseText.getTextFromSite();
                 System.out.println(lipsumTextFromSite);
+
+                parseText.setInputText(lipsumTextFromSite);
+                parseText.parseWithSplit();
+                parseText.showUnqWords();
+
+                parseText.parseWithStringTokenizer();
+                parseText.showUnqWords();
 
             } else {
                 break;
