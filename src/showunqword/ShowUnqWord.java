@@ -5,10 +5,8 @@
  */
 package showunqword;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
+
 
 /**
  *
@@ -25,31 +23,18 @@ public class ShowUnqWord {
 
         while (true) {
             System.out.print("Введите текст для подсчета количества уникальных слов в нем: ");
-            
+
             String lipsumText = sc.nextLine();
-            if (!lipsumText.equals("END")) {
+            if (!lipsumText.equals("end")) {
 
-                String pattern = "\\s+|,\\s*";
-                String[] allWords = lipsumText.trim().split("[ _,.;!?-]"/*pattern*/);
+                ParseText parseText = new ParseText(lipsumText);
 
-                Map<String, Integer> unqWords = new HashMap<>();
+                parseText.parseWithSplit();
+                parseText.showUnqWords();
 
-                for (String word : allWords) {
-                    int cntWordsInText;
-                    if (unqWords.containsKey(word)) {
-                        cntWordsInText = unqWords.get(word) + 1;
-                    } else {
-                        cntWordsInText = 1;
-                    }
-                    unqWords.put(word, cntWordsInText);
-                }
+                parseText.parseWithStringTokenizer();
+                parseText.showUnqWords();
 
-                System.out.println("Unique words");
-                Set<Map.Entry<String, Integer>> entrySetUnqWords = unqWords.entrySet();
-
-                for (Map.Entry<String, Integer> entry : entrySetUnqWords) {
-                    System.out.printf("%s: %d\n", entry.getKey(), entry.getValue());
-                }
             } else {
                 break;
             }
