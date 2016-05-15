@@ -8,11 +8,14 @@ package showunqword;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,7 +23,7 @@ import java.util.StringTokenizer;
  */
 public class ParseText {
 
-    private final static String PATTERN1 = "[ \t\n\r_,.;:!?-]";
+    private final static String PATTERN1 = "[ \t\n\r_,\\.;:!?-]";
     private final static String PATTERN2 = "\\s+|,\\s*";
 
     private String inputText;
@@ -49,13 +52,7 @@ public class ParseText {
         unqWords = new HashMap<>();
 
         for (String word : allWords) {
-            int cntWordsInText;
-            if (unqWords.containsKey(word)) {
-                cntWordsInText = unqWords.get(word) + 1;
-            } else {
-                cntWordsInText = 1;
-            }
-            unqWords.put(word, cntWordsInText);
+            unqWords.put(word, (unqWords.containsKey(word) ? unqWords.get(word) + 1 : 1));
         }
     }
 
@@ -87,31 +84,33 @@ public class ParseText {
         Set<Map.Entry<String, Integer>> entrySetUnqWords = unqWords.entrySet();
 
         for (Map.Entry<String, Integer> entry : entrySetUnqWords) {
-            System.out.printf("%s: %d\n", entry.getKey(), entry.getValue());
+            System.out.printf("%3d - %s\n", entry.getValue(), entry.getKey());
         }
     }
 
     public String getTextFromSite() {
-        BufferedReader reader = null;
         String allText = "";
 
+        URL site = null;
+        
         try {
-            URL site = new URL("http://ru.lipsum.com/");
-            reader = new BufferedReader(new InputStreamReader(site.openStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                allText = allText + line;
-            }
-            reader.close();
-        } catch (IOException ex) {
-            System.out.println("Невозможно открыть сайт");
-        } finally {
-            try {
+            site = new URL("http://ru.lipsum.com/");
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ParseText.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (site != null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(site.openStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    allText = allText + line;
+                }
                 reader.close();
             } catch (IOException ex) {
-                System.out.println("Ошибка при закрытии reader");
+                System.out.println("Невозможно открыть сайт");
             }
         }
+
         return allText;
     }
 
